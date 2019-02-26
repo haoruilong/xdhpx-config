@@ -86,6 +86,7 @@
 		<module>xdhpx-config-druid</module>
 		<module>xdhpx-config-jpa</module>
 		<module>xdhpx-config-redis</module>
+		<module>xdhpx-config-web</module>
 	</modules>
 
 </project>
