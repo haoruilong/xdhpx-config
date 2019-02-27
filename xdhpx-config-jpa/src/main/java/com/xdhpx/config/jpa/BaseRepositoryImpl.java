@@ -45,7 +45,6 @@ public class BaseRepositoryImpl<T, ID extends Serializable>
 	        result = true;
 	    } catch (Exception e) {
 	    	logger.info(entityManager.getClass().getName()+"---------------更新出错---------------");
-	    	throw e;
 	    }
 	    return result;
 	}
