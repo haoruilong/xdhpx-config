@@ -16,14 +16,12 @@
 		<springBoot.version>1.5.6.RELEASE</springBoot.version>
 	    <!-- 阿里数据源 德鲁伊 -->
 	    <druid.version>1.1.5</druid.version>
+	    <!-- redis版本号 -->
+		<redis.version>1.4.7.RELEASE</redis.version>
 		<!-- swagger版本号 -->
 		<swagger.version>2.7.0</swagger.version>
 		<!-- json -->
 		<fastjson.version>1.2.38</fastjson.version>
-		<!-- commons-lang -->
-		<commons-lang.version>2.6</commons-lang.version>
-		<!-- junit -->
-		<junit.version>4.12</junit.version>
   	</properties>
   	
   	<dependencyManagement>
@@ -46,6 +44,14 @@
 					</dependency>
 			        <!-- SpringBoot Druid依赖 结束 -->
 			        
+			        <!-- Redis相关依赖 开始-->  
+					<dependency>  
+						    <groupId>org.springframework.boot</groupId>  
+						    <artifactId>spring-boot-starter-redis</artifactId>  
+						    <version>${redis.version}</version>
+					</dependency> 
+			        <!-- Redis相关依赖 结束-->  
+			        
 			        <!-- swagger -->
 			        <dependency>
 		                <groupId>io.springfox</groupId>
@@ -64,20 +70,6 @@
 					      <artifactId>fastjson</artifactId>
 					      <version>${fastjson.version}</version>
 				    </dependency>
-				    
-					<!-- commons -->
-				    <dependency>
-						<groupId>commons-lang</groupId>
-						<artifactId>commons-lang</artifactId>
-						<version>${commons-lang.version}</version>
-					</dependency>
-					
-					<!-- junit -->
-					<dependency>
-					    <groupId>junit</groupId>
-					    <artifactId>junit</artifactId>
-					    <version>${junit.version}</version>
-					</dependency>
 				    
 			 </dependencies>
 	</dependencyManagement>
