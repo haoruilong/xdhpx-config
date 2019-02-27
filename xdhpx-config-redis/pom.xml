@@ -30,13 +30,6 @@
 				    <artifactId>spring-boot-starter-redis</artifactId>  
 				    <version>1.4.7.RELEASE</version>
 			</dependency> 
-			
-			<!-- 引入本地包 -->
-	  		<dependency>
-				<groupId>com.xdhpx</groupId>
-				<artifactId>xdhpx-tools</artifactId>
-				<version>${project.parent.version}</version>
-			</dependency>
 		
   </dependencies>
 </project>
