@@ -4,12 +4,16 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -60,14 +64,37 @@ public class WebConfig extends WebMvcConfigurerAdapter{
         configurer.favorPathExtension(false);
     }
     
-    /**解决跨域**/
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "POST", "OPTIONS", "PUT")
-                .allowedHeaders("Content-Type", "X-Requested-With", "accept", "Origin", "Access-Control-Request-Method",
-                        "Access-Control-Request-Headers")
-                .exposedHeaders("Access-Control-Allow-Origin", "Access-Control-Allow-Credentials")
-                .allowCredentials(true).maxAge(3600);
-    }
+    /**
+	 	CORS是一个W3C标准，全称是"跨域资源共享"(Cross-origin resource sharing)
+	 	它允许浏览器向跨源(协议 + 域名 + 端口)服务器，发出XMLHttpRequest请求，
+	 	从而克服了AJAX只能同源使用的限制。
+	 	
+	 	Spring Boot 配置 CORS 通过添加 Filter的方式
+	 **/
+    
+	@Bean
+	public FilterRegistrationBean corsFilter() {
+		/**Cors规则配置**/
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+	    /**允许跨域访问的域名,可指定,也可*代表所有**/
+	    corsConfiguration.addAllowedOrigin("*");
+	//    corsConfiguration.addAllowedOrigin("http://localhost:9000");
+	    corsConfiguration.addAllowedHeader("*");
+	    /**设置跨域请求方式,可指定,也可*代表所有**/
+	    corsConfiguration.addAllowedMethod("*");
+	//    corsConfiguration.addAllowedMethod(HttpMethod.POST);
+	    /**是否支持安全证书**/
+	    corsConfiguration.setAllowCredentials(true);
+	    /**预检请求的有效期，单位为秒**/
+	    corsConfiguration.setMaxAge(3600L);
+		
+	     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+	     source.registerCorsConfiguration("/**", corsConfiguration);
+	      
+	     FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+	     bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+	  
+	  	return bean;
+	}
 
 }
