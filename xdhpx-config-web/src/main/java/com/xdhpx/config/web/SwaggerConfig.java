@@ -23,9 +23,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
  
-	@Value("${swagger.title}")
+	@Value("${swagger.title : docTitle}")
     private String swaggerTitle;
-	@Value("${swagger.description}")  
+	@Value("${swagger.description : docInfo}")  
     private String swaggerDescription;
 	
 	@Bean
