@@ -35,10 +35,10 @@
             </dependency>
             
             <dependency>
-			  <groupId>com.github.xiaoymin</groupId>
-			  <artifactId>swagger-bootstrap-ui</artifactId>
-			  <version>1.8.9</version>
-		  </dependency>
+				  <groupId>com.github.xiaoymin</groupId>
+				  <artifactId>swagger-bootstrap-ui</artifactId>
+				  <version>1.9.2</version>
+			 </dependency>
             
             <!-- json -->
 		    <dependency>
