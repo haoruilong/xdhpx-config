@@ -48,8 +48,9 @@ public class RedisTemplateUtil {
     public boolean containsMapKey(String k) {
         return containsKey(KEY_PREFIX_MAP + k);
     }
+    
     /**实际判断方法**/
-    public boolean containsKey(String key) {
+    private boolean containsKey(String key) {
         try {
             return redisTemplate.hasKey(key);
         } catch (Throwable t) {
@@ -76,7 +77,7 @@ public class RedisTemplateUtil {
         return remove(KEY_PREFIX_MAP + k);
     }
     /**实际移除缓存方法**/
-    public boolean remove(String key) {
+    private boolean remove(String key) {
         try {
             redisTemplate.delete(key);
             return true;
