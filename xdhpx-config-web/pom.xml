@@ -13,7 +13,12 @@
   	<name>${project.artifactId}</name>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	    <!-- swagger版本号 -->
+		<swagger.version>2.9.2</swagger.version>
+		<swagger-ui.version>1.9.2</swagger-ui.version>
+		<!-- json -->
+		<fastjson.version>1.2.38</fastjson.version>
   </properties>
 
   <dependencies>
@@ -28,22 +33,24 @@
 	        <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
+                <version>${swagger.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
+                <version>${swagger.version}</version>
             </dependency>
-            
             <dependency>
 				  <groupId>com.github.xiaoymin</groupId>
 				  <artifactId>swagger-bootstrap-ui</artifactId>
-				  <version>1.9.2</version>
+				  <version>${swagger-ui.version}</version>
 			 </dependency>
             
             <!-- json -->
 		    <dependency>
 			      <groupId>com.alibaba</groupId>
 			      <artifactId>fastjson</artifactId>
+			      <version>${fastjson.version}</version>
 		    </dependency>
 		
   </dependencies>

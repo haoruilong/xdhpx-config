@@ -12,6 +12,9 @@ import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisPassword;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -29,6 +32,9 @@ public class RedisConfig extends CachingConfigurerSupport{
 	
 	@Autowired
     private RedisProperties redisProperties;
+	
+	@Autowired
+    private JedisConnectionFactory jedisConnectionFactory;
     
     /**  
      	写在前面的话
@@ -58,28 +64,22 @@ public class RedisConfig extends CachingConfigurerSupport{
         };
     }
 	
-    /**缓存管理**/
-    @Bean
-    public CacheManager cacheManager(RedisTemplate<?,?> redisTemplate) {
-    	CacheManager cacheManager = new RedisCacheManager(redisTemplate);
-        return cacheManager;
+	/**缓存管理**/
+  	@Bean
+    @Override
+    public CacheManager cacheManager() {
+  		
+        /**
+         初始化缓存管理器
+         在这里我们可以这是全局的参数,比如缓存的整体过期时间什么的
+         我这里默认没有配置
+        **/
+        RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager
+                .RedisCacheManagerBuilder
+                .fromConnectionFactory(jedisConnectionFactory);
+        return builder.build();
     }
-    
-    /**
-     *  自定义定义redisConnectionFactory
-     */
-    @Bean
-    public JedisConnectionFactory redisConnectionFactory() {
-        JedisConnectionFactory factory = new JedisConnectionFactory();
-        factory.setHostName(redisProperties.getHost());
-        factory.setPort(redisProperties.getPort());
-        factory.setPassword(redisProperties.getPassword());
-        factory.setTimeout(redisProperties.getTimeout()); /**设置连接超时时间**/
-        return factory;
-    }
-    
-
-    
+  	
     /** 
      * RedisTemplate配置
      * 
@@ -117,5 +117,23 @@ public class RedisConfig extends CachingConfigurerSupport{
         return redisTemplate;
     }
     
+    /**
+     *  自定义定义redisConnectionFactory
+     */
+	@Bean
+	 public JedisConnectionFactory redisConnectionFactory() {
+		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration ();
+		redisStandaloneConfiguration.setHostName(redisProperties.getHost());
+        redisStandaloneConfiguration.setPort(redisProperties.getPort());
+        redisStandaloneConfiguration.setPassword(RedisPassword.of(redisProperties.getPassword()));
+		
+        
+        JedisClientConfiguration.JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();
+        jedisClientConfiguration.connectTimeout(redisProperties.getTimeout());
+		
+        JedisConnectionFactory factory = new JedisConnectionFactory(redisStandaloneConfiguration,jedisClientConfiguration.build());
+		  return factory;
+	}
+	    
 
 }

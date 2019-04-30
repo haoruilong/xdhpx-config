@@ -3,18 +3,12 @@ package com.xdhpx.config.web;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
@@ -27,74 +21,51 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
  * @author  郝瑞龙
 */
 @Configuration
-public class WebConfig extends WebMvcConfigurerAdapter{
+public class WebConfig implements WebMvcConfigurer {
 	
-    @Bean
-    public HttpMessageConverters fastJsonHttpMessageConverters() {
+	
+    /**
+     * 	消息转化器
+     */
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+    	/**声明fastjson消息转化器**/
         FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
-
+        
+        /**声明默认配置规则**/
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat,
                 SerializerFeature.WriteNullStringAsEmpty,
                 SerializerFeature.WriteNullNumberAsZero,
                 SerializerFeature.WriteNullListAsEmpty,
                 SerializerFeature.WriteMapNullValue);
-
+        
+        /**配置规则添加到转换器中**/
         fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
         
-        HttpMessageConverter<?> converter = fastJsonHttpMessageConverter;
-        
-        return new HttpMessageConverters(converter);
-
-    }
-    
-    @Bean
-    public HttpMessageConverter<String> responseBodyConverter() {
-        return new StringHttpMessageConverter(Charset.forName("UTF-8"));
-    }
-
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        super.configureMessageConverters(converters);
-        converters.add(responseBodyConverter());
-    }
-
-    @Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        configurer.favorPathExtension(false);
+        /**把自定义的替换SpringBoot默认的**/
+        converters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        converters.add(fastJsonHttpMessageConverter);
     }
     
     /**
-	 	CORS是一个W3C标准，全称是"跨域资源共享"(Cross-origin resource sharing)
-	 	它允许浏览器向跨源(协议 + 域名 + 端口)服务器，发出XMLHttpRequest请求，
-	 	从而克服了AJAX只能同源使用的限制。
-	 	
-	 	Spring Boot 配置 CORS 通过添加 Filter的方式
-	 **/
+     * 	资源匹配设置,值为false表示favorPathExtension表示支持后缀匹配
+     */
+  @Override
+  public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+      configurer.favorPathExtension(false);
+  }
     
-	@Bean
-	public FilterRegistrationBean corsFilter() {
-		/**Cors规则配置**/
-		CorsConfiguration corsConfiguration = new CorsConfiguration();
-	    /**允许跨域访问的域名,可指定,也可*代表所有**/
-	    corsConfiguration.addAllowedOrigin("*");
-	//    corsConfiguration.addAllowedOrigin("http://localhost:9000");
-	    corsConfiguration.addAllowedHeader("*");
-	    /**设置跨域请求方式,可指定,也可*代表所有**/
-	    corsConfiguration.addAllowedMethod("*");
-	//    corsConfiguration.addAllowedMethod(HttpMethod.POST);
-	    /**是否支持安全证书**/
-	    corsConfiguration.setAllowCredentials(true);
-	    /**预检请求的有效期，单位为秒**/
-	    corsConfiguration.setMaxAge(3600L);
-		
-	     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-	     source.registerCorsConfiguration("/**", corsConfiguration);
-	      
-	     FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
-	     bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
-	  
-	  	return bean;
-	}
+    /**
+     * 	跨域设置
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")/**设置允许跨域的路径**/
+                .allowedOrigins("*")/**设置允许跨域请求的域名**/
+                .allowCredentials(true)/**是否允许证书 不再默认开启**/
+                .allowedMethods("*")/**设置允许的方法,可指定方法allowedMethods("GET", "POST", "PUT", "DELETE")**/
+                .maxAge(3600);/**跨域允许时间**/
+    }
 
 }
