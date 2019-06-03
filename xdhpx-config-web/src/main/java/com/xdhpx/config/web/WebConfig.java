@@ -65,6 +65,13 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")/**设置允许跨域请求的域名**/
                 .allowCredentials(true)/**是否允许证书 不再默认开启**/
                 .allowedMethods("*")/**设置允许的方法,可指定方法allowedMethods("GET", "POST", "PUT", "DELETE")**/
+                .allowedHeaders("*")/**设置允许的请求头列表，“*”表示允许所有的headers**/
+                /**设置在响应header中设置客户端可见的header**/
+                .exposedHeaders("access-control-allow-headers",
+                        "access-control-allow-methods",
+                        "access-control-allow-origin",
+                        "access-control-max-age",
+                        "X-Frame-Options")
                 .maxAge(3600);/**跨域允许时间**/
     }
 

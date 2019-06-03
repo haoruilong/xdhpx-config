@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
-import com.xdhpx.config.jpa.utils.Page;
+import com.xdhpx.config.jpa.model.Page;
 
 
 @SuppressWarnings("unchecked")

@@ -1,4 +1,4 @@
-package com.xdhpx.config.jpa.utils;
+package com.xdhpx.config.jpa.model;
 import java.io.Serializable;
 import java.util.List;
 
