@@ -13,7 +13,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- SpringBoot相关 -->
-		<springBoot.version>2.1.4.RELEASE</springBoot.version>
+		<springBoot.version>2.1.5.RELEASE</springBoot.version>
   	</properties>
   	
   	<dependencyManagement>
