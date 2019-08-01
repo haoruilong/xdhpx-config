@@ -23,9 +23,12 @@
 hs_err_pid*
 xdhpx-config-redis/.settings/
 xdhpx-config-jpa/.settings/
-*.project
-*.gitignore
-*.classpath
 xdhpx-config-druid/.settings/
-*.prefs
 xdhpx-config-web/.settings/
+xdhpx-config-druid/target/
+xdhpx-config-jpa/target/
+xdhpx-config-redis/target/
+xdhpx-config-web/target/
+*.classpath
+*.project
+*.prefs
